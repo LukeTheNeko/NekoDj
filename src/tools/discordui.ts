@@ -21,6 +21,10 @@ discordUI({
                     emoji: icon("cross"),
                     label: "",
                 },
+                view: {
+                    emoji: icon("view"),
+                    label: "",
+                },
             }
         }
     }

@@ -6,6 +6,12 @@ import { multimenu } from "@magicyan/discord-ui";
 import { QueryType, SearchQueryType, useMainPlayer } from "discord-player";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js";
 
+const disallowedQueryTypes = ["AUTO", "YOUTUBE", "YOUTUBE_PLAYLIST", "SOUNDCLOUD_TRACK", "FACEBOOK", "VIMEO", "ARBITRARY", "REVERBNATION", "YOUTUBE_SEARCH", "YOUTUBE_VIDEO", "FILE", "AUTO_SEARCH" ];
+
+const engineChoices = Object.entries(QueryType)
+    .filter(([value]) => !disallowedQueryTypes.includes(value))
+    .map(([key, value]) => ({ name: key, value }));
+
 new Command({
     name: "música",
     description: "Comando de música",
@@ -27,9 +33,7 @@ new Command({
                     name: "engine",
                     description: "Engine de busca",
                     type: ApplicationCommandOptionType.String,
-                    choices: Object.values(QueryType).map(type => ({
-                        name: type, value: type
-                    }))
+                    choices: engineChoices
                 }
             ]
         },
@@ -70,10 +74,8 @@ new Command({
                     name: "engine",
                     description: "Engine de busca",
                     type: ApplicationCommandOptionType.String,
-                    choices: Object.values(QueryType).map(type => ({
-                        name: type, value: type
-                    })),
-                    required,
+                    choices: engineChoices,
+                    required: true
                 },
                 {
                     name: "busca",
@@ -156,7 +158,9 @@ new Command({
             return;
         }
 
-        const metadata = createQueueMetada({ channel, client, guild, voiceChannel });
+        const requestedBy = interaction.user;
+
+        const metadata = createQueueMetada({ channel, client, guild, voiceChannel, requestedBy });
         const player = useMainPlayer();
         const queue = player.queues.cache.get(guild.id);
 
@@ -165,12 +169,12 @@ new Command({
         switch(options.getSubcommand(true)){
             case "tocar":{
                 const query = options.getString("busca", true);
-                const searchEngine = options.getString("engine") ?? QueryType.YOUTUBE;
+                const searchEngine = options.getString("engine") ?? QueryType.SPOTIFY_SEARCH;
 
                 try {
                     const { track, searchResult } = await player.play(voiceChannel as never, query, {
                         searchEngine: searchEngine as SearchQueryType,
-                        nodeOptions: { metadata }
+                        nodeOptions: { metadata },
                     });
 
                     const display: string[] = [];
@@ -252,10 +256,10 @@ new Command({
                     embed: createEmbed({
                         color: settings.color.theme.magic,
                         description: brBuilder(
-                            "# Fila atual",
-                            `Músicas: ${queue.tracks.size}`,
+                            `# ${icon("gear")} Fila atual`,
+                            `${icon("warn2")} Músicas: ${queue.tracks.size}`,
                             "",
-                            `Música atual: ${queue.currentTrack?.title ?? "Nenhuma"}`
+                            `**${icon("music")} Música Atual**:: ${queue.currentTrack?.title ?? "Nenhuma"}`,
                         )
                     }),
                     items: queue.tracks.map(track => ({
@@ -264,6 +268,7 @@ new Command({
                             `**${icon("music")} Música**: [${track.title}](${track.url})`,
                             `**${icon("user")} Autor**: ${track.author}`,
                             `**${icon("clock")} Duração**: ${track.duration}`,
+                            `**${icon("upload")} Soliciado Por**: ${requestedBy}`,
                         ),
                         thumbnail: track.thumbnail
                     })),

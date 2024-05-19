@@ -1,5 +1,6 @@
 {
-  "name": "music",
+  "name": "nekodj",
+  "author": "luketheneko",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
