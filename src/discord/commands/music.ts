@@ -6,7 +6,7 @@ import { multimenu } from "@magicyan/discord-ui";
 import { QueryType, SearchQueryType, useMainPlayer } from "discord-player";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js";
 
-const disallowedQueryTypes = ["AUTO", "YOUTUBE", "YOUTUBE_PLAYLIST", "SOUNDCLOUD_TRACK", "FACEBOOK", "VIMEO", "ARBITRARY", "REVERBNATION", "YOUTUBE_SEARCH", "YOUTUBE_VIDEO", "FILE", "AUTO_SEARCH"];
+const disallowedQueryTypes = ["AUTO", "YOUTUBE", "YOUTUBE_PLAYLIST", "FACEBOOK", "VIMEO", "ARBITRARY", "REVERBNATION", "YOUTUBE_SEARCH", "YOUTUBE_VIDEO", "FILE", "AUTO_SEARCH"];
 
 const engineChoices = Object.entries(QueryType)
     .filter(([value]) => !disallowedQueryTypes.includes(value))
@@ -208,7 +208,8 @@ new Command({
 
                 try {
                     const { track } = await player.play(voiceChannel as never, trackUrl, {
-                        searchEngine, nodeOptions: { metadata }
+                        searchEngine, nodeOptions: { metadata },
+                        requestedBy: user.id,
                     });
 
                     const text = queue?.size ? "Adicionado à fila" : "Tocando agora";

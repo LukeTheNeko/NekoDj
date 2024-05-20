@@ -6,13 +6,12 @@ export function validateVoiceState(interaction: ButtonInteraction | CommandInter
     const voiceState = (interaction.member as GuildMember).voice;
     const botVoiceChannel = interaction.guild?.voiceStates.cache.get(interaction.client.user!.id)?.channel;
 
-    if (!voiceState || !voiceState.channel) {
-        interaction.editReply(res.danger(`${icon("warn3")} Você precisa estar em uma chamada de voz para usar este comando!`));
-        return false;
+    if (!botVoiceChannel) {
+        return true;
     }
 
-    if (!botVoiceChannel) {
-        interaction.editReply(res.danger(`${icon("warn3")} O bot não está em uma chamada de voz!`));
+    if (!voiceState || !voiceState.channel) {
+        interaction.editReply(res.danger(`${icon("warn3")} Você precisa estar em uma chamada de voz para usar este comando!`));
         return false;
     }
 
