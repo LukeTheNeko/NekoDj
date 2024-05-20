@@ -3,6 +3,7 @@
   "author": "luketheneko",
   "type": "module",
   "main": "dist/index.js",
+  "license": "MIT",
   "scripts": {
     "build:dev": "tsc --noEmit && echo ✔ Ok",
     "build": "tsc",
