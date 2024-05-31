@@ -35,8 +35,8 @@
   "material-icon-theme.folders.theme": "specific",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    ".env": ".env.development, .env.production, .env.test",
-    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, tsconfig.json, .eslintrc.json, .gitignore, .discloudignore, squarecloud.app"
+    ".env": ".env.development, .env.production, .env.test, .env.example",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, tsconfig.json, .eslintrc.json, .gitignore, .discloudignore, squarecloud.app, discloud.config, LICENCE.txt"
   },
   "typescript.suggest.autoImports": true,
   "window.title": "${rootName}${separator}${appName}",
