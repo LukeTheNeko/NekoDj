@@ -14,7 +14,7 @@ const engineChoices = Object.entries(QueryType)
 
 new Command({
     name: "música",
-    description: "Comando de música",
+    description: "🎵 Comando de música",
     dmPermission: false,
     type: ApplicationCommandType.ChatInput,
     options: [
